@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tom Jeffers — Digital Storyteller</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f7f6f4;
+      --grey-light: #e8e7e4;
+      --grey-mid: #b0aea9;
+      --grey-dark: #4a4845;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--serif);
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CURSOR */
+    #cursor {
+      width: 8px; height: 8px;
+      background: var(--black);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+    }
+    #cursor.hover {
+      width: 40px; height: 40px;
+      background: transparent;
+      border: 1px solid var(--black);
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 2rem 3rem;
+      mix-blend-mode: multiply;
+    }
+    .nav-logo {
+      font-family: var(--mono); font-size: 0.7rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--black); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--grey-dark); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--black); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: end; padding: 0 3rem 4rem;
+    }
+    .hero-text { grid-column: 1 / -1; }
+    .hero-eyebrow {
+      font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--grey-mid); display: block; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 8vw, 8rem);
+      font-weight: 300; line-height: 0.95; letter-spacing: -0.02em;
+    }
+    .hero h1 em { font-style: italic; font-weight: 300; }
+    .hero-sub {
+      margin-top: 3rem; display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem; align-items: end;
+      border-top: 1px solid var(--grey-light); padding-top: 2rem;
+    }
+    .hero-desc { font-size: 1.1rem; color: var(--grey-dark); max-width: 380px; line-height: 1.7; }
+    .hero-cta { text-align: right; }
+    .btn {
+      display: inline-block; font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--black); text-decoration: none;
+      border: 1px solid var(--black); padding: 0.9rem 2rem;
+      transition: background 0.25s, color 0.25s;
+    }
+    .btn:hover { background: var(--black); color: var(--white); }
+    .btn-ghost { background: transparent; }
+
+    /* SHARED */
+    section { padding: 7rem 3rem; }
+    .section-label {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--grey-mid); display: flex; align-items: center;
+      gap: 1rem; margin-bottom: 4rem;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--grey-light); }
+
+    /* ABOUT */
+    .about { background: var(--black); color: var(--white); }
+    .about .section-label { color: var(--grey-dark); }
+    .about .section-label::after { background: var(--grey-dark); }
+    .about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 5rem; align-items: start; }
+    .about-name { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.1; letter-spacing: -0.01em; }
+    .about-name em { font-style: italic; color: var(--grey-mid); }
+    .about-body p { font-size: 1.25rem; line-height: 1.75; color: #c8c6c2; margin-bottom: 1.5rem; }
+    .about-body p:first-child { color: var(--white); font-size: 1.4rem; }
+    .skills-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2.5rem; }
+    .skill-tag {
+      font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
+      text-transform: uppercase; border: 1px solid var(--grey-dark);
+      color: var(--grey-mid); padding: 0.4rem 0.9rem;
+    }
+
+    /* WORK */
+    .work { background: var(--white); }
+    .work-filters { display: flex; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap; }
+    .filter-btn {
+      font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
+      text-transform: uppercase; background: none; border: none;
+      color: var(--grey-mid); cursor: none; padding: 0.3rem 0;
+      border-bottom: 1px solid transparent; transition: color 0.2s, border-color 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover { color: var(--black); border-bottom-color: var(--black); }
+    .work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+
+    .work-card {
+      background: var(--grey-light); position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.75rem; transition: background 0.3s;
+      text-decoration: none; color: inherit; min-height: 270px;
+    }
+    .work-card:hover { background: #dddbd7; }
+    .work-card.featured { grid-column: span 2; min-height: 310px; }
+    .work-card-tag {
+      font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--grey-mid); margin-bottom: 0.5rem;
+    }
+    .work-card-title { font-size: 1.35rem; font-weight: 400; line-height: 1.2; color: var(--black); margin-bottom: 0.4rem; }
+    .work-card-desc { font-size: 0.95rem; color: var(--grey-dark); line-height: 1.5; margin-top: 0.5rem; }
+    .work-card-client { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; color: var(--grey-dark); text-transform: uppercase; margin-top: 0.8rem; }
+    .work-card-arrow {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      font-size: 1.2rem; color: var(--grey-mid);
+      transition: transform 0.2s, color 0.2s;
+    }
+    .work-card:hover .work-card-arrow { transform: translate(3px, -3px); color: var(--black); }
+
+    .work-card-dark {
+      background: #1c1c1c; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.75rem; min-height: 270px;
+    }
+    .work-card-dark .work-card-tag { color: var(--grey-dark); }
+    .work-card-dark .work-card-title { color: var(--white); }
+    .work-card-dark .work-card-desc { color: #888; }
+    .work-card-dark .work-card-client { color: var(--grey-dark); }
+
+    .work-card-pdf {
+      background: #111; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.75rem; min-height: 270px;
+    }
+    .work-card-pdf .work-card-tag { color: var(--grey-dark); }
+    .work-card-pdf .work-card-title { color: var(--white); }
+    .work-card-pdf .work-card-desc { color: #888; font-size: 0.9rem; }
+    .work-card-pdf .work-card-client { color: var(--grey-dark); }
+    .pdf-badge {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.12em;
+      text-transform: uppercase; background: #2a2a2a; color: var(--grey-mid); padding: 0.3rem 0.6rem;
+    }
+    .pdf-stats { display: flex; gap: 1.5rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #2a2a2a; }
+    .pdf-stat-num { font-family: var(--mono); font-size: 0.85rem; color: var(--grey-mid); display: block; }
+    .pdf-stat-label { font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-dark); }
+
+    .work-card-video {
+      background: var(--black); display: flex; flex-direction: column;
+      overflow: hidden; min-height: 270px;
+    }
+    .work-card-video iframe { width: 100%; flex: 1; min-height: 180px; border: none; display: block; }
+    .work-card-video-meta { padding: 1.25rem 1.75rem; }
+    .work-card-video .work-card-tag { color: var(--grey-dark); }
+    .work-card-video .work-card-title { color: var(--white); font-size: 1.1rem; }
+    .work-card-video .work-card-desc { color: #888; font-size: 0.9rem; }
+    .work-card-video .work-card-client { color: var(--grey-dark); }
+
+    /* CLIENTS */
+    .clients { background: var(--black); color: var(--white); padding: 5rem 3rem; }
+    .clients .section-label { color: var(--grey-dark); }
+    .clients .section-label::after { background: #333; }
+    .clients-list { display: flex; flex-wrap: wrap; gap: 0; }
+    .client-item {
+      flex: 1; min-width: 160px; padding: 2rem;
+      border: 1px solid #1e1e1e; font-size: 1.1rem; font-weight: 300;
+      color: var(--grey-mid); transition: color 0.2s, border-color 0.2s;
+    }
+    .client-item:hover { color: var(--white); border-color: #444; }
+    .client-item span {
+      display: block; font-family: var(--mono); font-size: 0.55rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--grey-dark); margin-bottom: 0.5rem;
+    }
+
+    /* ── CV / EXPERIENCE (expandable) ── */
+    .cv-section { background: var(--white); padding: 0; }
+
+    .cv-toggle {
+      width: 100%;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 3rem;
+      background: none; border: none; border-top: 1px solid var(--grey-light);
+      cursor: none; text-align: left;
+      transition: background 0.2s;
+    }
+    .cv-toggle:hover { background: #f0efec; }
+    .cv-toggle-left { display: flex; flex-direction: column; gap: 0.4rem; }
+    .cv-toggle-label {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey-mid);
+    }
+    .cv-toggle-title { font-family: var(--serif); font-size: 1.5rem; font-weight: 300; color: var(--black); }
+    .cv-toggle-right { display: flex; align-items: center; gap: 1.5rem; }
+    .cv-toggle-hint {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-mid);
+    }
+    .cv-arrow {
+      font-size: 1.4rem; color: var(--grey-mid);
+      transition: transform 0.35s ease, color 0.2s;
+      display: inline-block;
+    }
+    .cv-toggle[aria-expanded="true"] .cv-arrow { transform: rotate(180deg); color: var(--black); }
+
+    .cv-panel {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .cv-panel.open { max-height: 9999px; }
+    .cv-panel-inner { padding: 0 3rem 5rem; border-top: 1px solid var(--grey-light); }
+
+    /* CV content styles */
+    .cv-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 3rem 0 2rem;
+      border-bottom: 1px solid var(--grey-light); margin-bottom: 3rem;
+    }
+    .cv-name { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 300; letter-spacing: -0.01em; }
+    .cv-contact { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; color: var(--grey-dark); text-align: right; line-height: 1.8; }
+    .cv-contact a { color: var(--grey-dark); text-decoration: none; }
+    .cv-contact a:hover { color: var(--black); }
+
+    .cv-summary {
+      font-size: 1.2rem; color: var(--grey-dark); line-height: 1.75;
+      max-width: 700px; margin-bottom: 4rem; padding-bottom: 3rem;
+      border-bottom: 1px solid var(--grey-light);
+    }
+
+    .cv-block { margin-bottom: 4rem; }
+    .cv-block-title {
+      font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--grey-mid);
+      margin-bottom: 2rem; padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--grey-light);
+    }
+
+    .cv-role {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 1rem; align-items: start;
+      padding: 1.75rem 0; border-bottom: 1px solid var(--grey-light);
+    }
+    .cv-role:last-child { border-bottom: none; }
+    .cv-role-org { font-size: 1.1rem; font-weight: 400; color: var(--black); margin-bottom: 0.2rem; }
+    .cv-role-title { font-size: 1rem; color: var(--grey-dark); font-style: italic; margin-bottom: 0.15rem; }
+    .cv-role-dates {
+      font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--grey-mid); text-align: right; white-space: nowrap;
+    }
+    .cv-role-location {
+      font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--grey-mid); text-align: right; margin-top: 0.2rem;
+    }
+    .cv-role-desc {
+      font-size: 0.95rem; color: var(--grey-dark); line-height: 1.6;
+      margin-top: 0.75rem; grid-column: 1 / -1;
+    }
+    .cv-role-desc ul { list-style: none; padding: 0; }
+    .cv-role-desc li { padding: 0.2rem 0 0.2rem 1.2rem; position: relative; }
+    .cv-role-desc li::before { content: '—'; position: absolute; left: 0; color: var(--grey-mid); font-size: 0.8rem; }
+    .cv-role-accounts {
+      font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--grey-mid);
+      margin-top: 0.75rem; grid-column: 1 / -1;
+    }
+
+    .cv-edu-item {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--grey-light);
+    }
+    .cv-edu-item:last-child { border-bottom: none; }
+    .cv-edu-inst { font-size: 1rem; font-weight: 400; color: var(--black); }
+    .cv-edu-degree { font-size: 0.95rem; color: var(--grey-dark); font-style: italic; }
+    .cv-edu-right { text-align: right; }
+    .cv-edu-dates { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-mid); }
+    .cv-edu-location { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey-mid); margin-top: 0.2rem; }
+
+    .cv-skills-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+    .cv-skill-group-label {
+      font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--grey-mid); display: block; margin-bottom: 0.6rem;
+    }
+    .cv-skill-group-value { font-size: 0.95rem; color: var(--grey-dark); line-height: 1.65; }
+
+    /* CONTACT */
+    .contact {
+      background: var(--black); color: var(--white);
+      min-height: 60vh; display: flex; flex-direction: column;
+      justify-content: center; padding: 7rem 3rem;
+    }
+    .contact .section-label { color: var(--grey-dark); }
+    .contact .section-label::after { background: #333; }
+    .contact-headline {
+      font-size: clamp(2.5rem, 6vw, 6rem); font-weight: 300;
+      line-height: 1; letter-spacing: -0.02em; margin-bottom: 3rem; max-width: 800px;
+    }
+    .contact-headline em { font-style: italic; color: var(--grey-mid); }
+    .contact-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .contact-link {
+      font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--white); text-decoration: none;
+      border: 1px solid #333; padding: 0.9rem 2rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .contact-link:hover { border-color: var(--white); background: #111; }
+
+    /* FOOTER */
+    footer {
+      background: var(--black); border-top: 1px solid #1a1a1a;
+      padding: 1.5rem 3rem; display: flex;
+      justify-content: space-between; align-items: center;
+    }
+    footer p { font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.1em; color: var(--grey-dark); text-transform: uppercase; }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      .work-grid { grid-template-columns: 1fr 1fr; }
+      .work-card.featured { grid-column: span 2; }
+      .cv-skills-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 0 1.5rem 3rem; grid-template-columns: 1fr; }
+      .hero-sub { grid-template-columns: 1fr; }
+      .hero-cta { text-align: left; }
+      section { padding: 5rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .work-grid { grid-template-columns: 1fr; }
+      .work-card.featured { grid-column: span 1; }
+      .clients { padding: 4rem 1.5rem; }
+      .cv-toggle { padding: 2rem 1.5rem; }
+      .cv-panel-inner { padding: 0 1.5rem 4rem; }
+      .cv-header { flex-direction: column; gap: 1rem; }
+      .cv-contact { text-align: left; }
+      .cv-role { grid-template-columns: 1fr; }
+      .cv-role-dates, .cv-role-location { text-align: left; }
+      .cv-edu-item { grid-template-columns: 1fr; }
+      .cv-edu-right { text-align: left; }
+      .cv-skills-grid { grid-template-columns: 1fr; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+      body { cursor: auto; }
+      #cursor { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Tom Jeffers</a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#cv">CV</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text reveal">
+      <span class="hero-eyebrow">Content Strategist &amp; Digital Storyteller</span>
+      <h1>Considered.<br><em>Precise.</em><br>Intentional.</h1>
+      <div class="hero-sub">
+        <p class="hero-desc">
+          I write, edit, and strategise content for organisations that need to be understood — clearly, accurately, and in the right places.
+        </p>
+        <div class="hero-cta">
+          <a href="#work" class="btn btn-ghost">View my work ↓</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-label">About</div>
+    <div class="about-grid reveal">
+      <div>
+        <h2 class="about-name">Tom<br><em>Jeffers</em></h2>
+      </div>
+      <div class="about-body">
+        <p>
+          I'm a content strategist and editor with a background in proofreading and publishing. I work with global organisations to shape content that is well-structured, well-written, and built to perform.
+        </p>
+        <p>
+          My grounding in content and technical SEO informs how I approach every project — from site architecture and metadata to the kind of structured, authoritative writing that holds its ground as search evolves into AI-driven discovery.
+        </p>
+        <p>
+          Alongside editorial work, I have experience concepting and delivering global public health campaigns and producing both internal and external communications for corporate and multilateral clients.
+        </p>
+        <p>
+          Currently available for freelance projects and full-time roles.
+        </p>
+        <div class="skills-row">
+          <span class="skill-tag">Content Strategy</span>
+          <span class="skill-tag">Editing &amp; Proofreading</span>
+          <span class="skill-tag">Technical SEO</span>
+          <span class="skill-tag">Copywriting</span>
+          <span class="skill-tag">Global Campaigns</span>
+          <span class="skill-tag">Corporate Comms</span>
+          <span class="skill-tag">Social Strategy</span>
+          <span class="skill-tag">GEO / AI Search</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="work" id="work">
+    <div class="section-label">Selected Work</div>
+    <div class="work-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="editorial">Editorial</button>
+      <button class="filter-btn" data-filter="campaign">Campaign</button>
+      <button class="filter-btn" data-filter="social">Social</button>
+      <button class="filter-btn" data-filter="comms">Comms</button>
+    </div>
+    <div class="work-grid">
+
+      <a class="work-card featured reveal" data-category="editorial comms"
+         href="https://www.nestle.com/sustainability/" target="_blank" rel="noopener">
+        <span class="work-card-tag">Editorial · Corporate Comms</span>
+        <div class="work-card-title">Nestlé Sustainability</div>
+        <p class="work-card-desc">Strategy, copywriting and editing for Nestlé's sustainability content — translating complex global commitments into clear, credible public-facing copy across a high-traffic corporate site.</p>
+        <div class="work-card-client">Nestlé · nestle.com/sustainability</div>
+        <span class="work-card-arrow">↗</span>
+      </a>
+
+      <a class="work-card reveal" data-category="editorial comms"
+         href="https://www.wjinitiative2030.org" target="_blank" rel="noopener">
+        <span class="work-card-tag">Editorial · Industry Platform</span>
+        <div class="work-card-title">Watch &amp; Jewellery<br>Initiative 2030</div>
+        <p class="work-card-desc">Strategy and copywriting for the WJI 2030 site and resources — positioning a multi-stakeholder sustainability platform for an international industry audience.</p>
+        <div class="work-card-client">WJI 2030 · wjinitiative2030.org</div>
+        <span class="work-card-arrow">↗</span>
+      </a>
+
+      <a class="work-card reveal" data-category="campaign social"
+         href="https://world-heart-federation.org/world-heart-day/" target="_blank" rel="noopener">
+        <span class="work-card-tag">Campaign · Social Strategy</span>
+        <div class="work-card-title">World Heart Day<br>2021–2024</div>
+        <p class="work-card-desc">Concept, paid and organic social media strategy for the World Heart Federation's flagship annual campaign — reaching global audiences across multiple languages and markets.</p>
+        <div class="work-card-client">World Heart Federation · 2021–2024</div>
+        <span class="work-card-arrow">↗</span>
+      </a>
+
+      <div class="work-card work-card-pdf reveal" data-category="campaign comms">
+        <div class="pdf-badge">Abridged Report</div>
+        <span class="work-card-tag">Campaign · Reporting</span>
+        <div class="work-card-title">International HPV<br>Awareness Day 2024</div>
+        <p class="work-card-desc">Campaign strategy, content and reporting for IPVS's global HPV awareness initiative — coordinating messaging across 140 partner organisations in 19+ countries.</p>
+        <div class="work-card-client">IPVS / AskAboutHPV.org · 2024</div>
+        <div class="pdf-stats">
+          <div class="pdf-stat">
+            <span class="pdf-stat-num">1M+</span>
+            <span class="pdf-stat-label">New site visitors</span>
+          </div>
+          <div class="pdf-stat">
+            <span class="pdf-stat-num">97.5M</span>
+            <span class="pdf-stat-label">Hashtag reach</span>
+          </div>
+          <div class="pdf-stat">
+            <span class="pdf-stat-num">140</span>
+            <span class="pdf-stat-label">Global partners</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-card work-card-dark reveal" data-category="campaign social">
+        <span class="work-card-tag">Campaign · Copywriting · Social</span>
+        <div class="work-card-title">World Stroke Day<br>Campaign Toolkit</div>
+        <p class="work-card-desc">Concept, copywriting and social media strategy for the World Stroke Day campaign toolkit — giving partner organisations globally localisation-ready assets and messaging frameworks.</p>
+        <div class="work-card-client">World Stroke Organization</div>
+      </div>
+
+      <div class="work-card work-card-video reveal" data-category="comms editorial">
+        <iframe
+          src="https://www.youtube.com/embed/kO4qBXIaw60"
+          title="Strategy &amp; Copywriting — Tom Jeffers"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+        <div class="work-card-video-meta">
+          <span class="work-card-tag">Video · Copywriting</span>
+          <div class="work-card-title">Strategy &amp; Copywriting</div>
+          <p class="work-card-desc">Script strategy and copywriting for video production.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CLIENTS -->
+  <div class="clients reveal">
+    <div class="section-label">Selected Clients</div>
+    <div class="clients-list">
+      <div class="client-item"><span>Food &amp; Beverage</span>Nestlé</div>
+      <div class="client-item"><span>Public Health</span>World Heart Federation</div>
+      <div class="client-item"><span>UN Agency</span>WHO</div>
+      <div class="client-item"><span>Public Health</span>IPVS</div>
+      <div class="client-item"><span>Public Health</span>Planned Parenthood</div>
+      <div class="client-item"><span>UN Agency</span>ILO</div>
+      <div class="client-item"><span>Luxury / Sustainability</span>WJI 2030</div>
+      <div class="client-item"><span>Public Health</span>World Stroke Organization</div>
+    </div>
+  </div>
+
+  <!-- CV — expandable -->
+  <div class="cv-section" id="cv">
+    <button class="cv-toggle" aria-expanded="false" aria-controls="cv-panel" id="cv">
+      <div class="cv-toggle-left">
+        <span class="cv-toggle-label">Experience &amp; Education</span>
+        <span class="cv-toggle-title">Curriculum Vitae</span>
+      </div>
+      <div class="cv-toggle-right">
+        <span class="cv-toggle-hint">Expand</span>
+        <span class="cv-arrow">↓</span>
+      </div>
+    </button>
+
+    <div class="cv-panel" id="cv-panel" role="region" aria-labelledby="cv">
+      <div class="cv-panel-inner">
+
+        <!-- CV Header -->
+        <div class="cv-header">
+          <div class="cv-name">Tom Jeffers</div>
+          <div class="cv-contact">
+            <a href="mailto:tommyjeffers@gmail.com">tommyjeffers@gmail.com</a><br>
+            <a href="https://www.linkedin.com/in/tom-jeffers/" target="_blank" rel="noopener">linkedin.com/in/tom-jeffers</a>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <p class="cv-summary">
+          Experienced communications professional with 10+ years driving performance through strategy and storytelling. Native English speaker with specialist skills in internal communications, brand activation, content marketing, team leadership, and training &amp; consulting.
+        </p>
+
+        <!-- Experience -->
+        <div class="cv-block">
+          <div class="cv-block-title">Experience</div>
+
+          <div class="cv-role">
+            <div>
+              <div class="cv-role-org">Anthesis Switzerland <span style="font-weight:300;font-style:italic;font-size:0.9rem;">(formerly CharlesCannon)</span></div>
+              <div class="cv-role-title">Digital Strategy Director</div>
+              <div class="cv-role-desc">
+                <ul>
+                  <li>Devise digital content strategies with strong focus on sustainability and brand purpose for internal and external communications</li>
+                  <li>Oversee performance and reporting</li>
+                </ul>
+              </div>
+              <div class="cv-role-title" style="margin-top:1.25rem;">Senior Creative</div>
+              <div class="cv-role-desc">
+                <ul>
+                  <li>Craft strategies that translate complex issues into clear, compelling narratives for internal and external communications</li>
+                  <li>Develop creative concepts for brands, campaigns and activations that resonate with diverse stakeholder audiences</li>
+                </ul>
+              </div>
+              <div class="cv-role-accounts">Key accounts: Nestlé · Trafigura · World Heart Federation</div>
+            </div>
+            <div>
+              <div class="cv-role-dates">Apr 2023 – Oct 2025<br><span style="opacity:0.6;">Oct 2020 – Apr 2023</span></div>
+              <div class="cv-role-location">Geneva, Switzerland<br>Minneapolis, MN</div>
+            </div>
+          </div>
+
+          <div class="cv-role">
+            <div>
+              <div class="cv-role-org">Collective Measures <span style="font-weight:300;font-style:italic;font-size:0.9rem;">(formerly Nina Hale)</span></div>
+              <div class="cv-role-title">Senior SEO Planner</div>
+              <div class="cv-role-desc">
+                <ul>
+                  <li>Consult with clients to create quality web content</li>
+                  <li>Analyse data to inform tactical recommendations and optimisations</li>
+                </ul>
+              </div>
+              <div class="cv-role-title" style="margin-top:1.25rem;">Agency Editor</div>
+              <div class="cv-role-desc">
+                <ul>
+                  <li>Create, write and edit external communications</li>
+                  <li>Lead client communication strategy and approach</li>
+                  <li>Create and maintain agency style guide</li>
+                  <li>Provide training through new employee onboarding and ongoing workshops</li>
+                </ul>
+              </div>
+              <div class="cv-role-accounts">Key accounts: United Healthcare · 3M · Securian Financial</div>
+            </div>
+            <div>
+              <div class="cv-role-dates">Sep 2018 – Sep 2020<br><span style="opacity:0.6;">Mar 2016 – Sep 2018</span></div>
+              <div class="cv-role-location">Minneapolis, MN</div>
+            </div>
+          </div>
+
+          <div class="cv-role">
+            <div>
+              <div class="cv-role-org">Gradient Positioning Systems</div>
+              <div class="cv-role-title">Freelance Copy Editor</div>
+              <div class="cv-role-desc">
+                <ul>
+                  <li>Create and edit copy for financial advisors' marketing material</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="cv-role-dates">Apr 2015 – Mar 2016</div>
+              <div class="cv-role-location">Arden Hills, MN</div>
+            </div>
+          </div>
+
+          <div class="cv-role">
+            <div>
+              <div class="cv-role-org">Tuairisc.ie</div>
+              <div class="cv-role-title">Copyeditor</div>
+              <div class="cv-role-desc">
+                <ul>
+                  <li>Edit copy for Irish language online news service</li>
+                  <li>Provide quick turnarounds on breaking news articles</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="cv-role-dates">Jan 2016 – Mar 2016</div>
+              <div class="cv-role-location">Galway, Ireland</div>
+            </div>
+          </div>
+
+          <div class="cv-role">
+            <div>
+              <div class="cv-role-org">Star Translation Services</div>
+              <div class="cv-role-title">Freelance Translator &amp; Editor</div>
+              <div class="cv-role-desc">
+                <ul>
+                  <li>Translate and edit copy for official, legal, and literary texts</li>
+                  <li>Proof and edit content for publication</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="cv-role-dates">Jan 2013 – Present</div>
+              <div class="cv-role-location">Dublin, Ireland</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div class="cv-block">
+          <div class="cv-block-title">Education</div>
+
+          <div class="cv-edu-item">
+            <div>
+              <div class="cv-edu-inst">National University of Ireland, Maynooth</div>
+              <div class="cv-edu-degree">Higher Diploma, Editing and Translation</div>
+            </div>
+            <div class="cv-edu-right">
+              <div class="cv-edu-dates">Sep 2012 – May 2014</div>
+              <div class="cv-edu-location">Kildare, Ireland</div>
+            </div>
+          </div>
+
+          <div class="cv-edu-item">
+            <div>
+              <div class="cv-edu-inst">University of St. Thomas</div>
+              <div class="cv-edu-degree">Master of Education</div>
+            </div>
+            <div class="cv-edu-right">
+              <div class="cv-edu-dates">Sep 2008 – Jul 2010</div>
+              <div class="cv-edu-location">Saint Paul, MN</div>
+            </div>
+          </div>
+
+          <div class="cv-edu-item">
+            <div>
+              <div class="cv-edu-inst">Fulbright Commission</div>
+              <div class="cv-edu-degree">Foreign Language Teaching Assistantship</div>
+            </div>
+            <div class="cv-edu-right">
+              <div class="cv-edu-dates">Sep 2008 – Jul 2010</div>
+            </div>
+          </div>
+
+          <div class="cv-edu-item">
+            <div>
+              <div class="cv-edu-inst">University College Dublin</div>
+              <div class="cv-edu-degree">Bachelor of Arts International — History &amp; Irish</div>
+            </div>
+            <div class="cv-edu-right">
+              <div class="cv-edu-dates">Sep 2003 – May 2007</div>
+              <div class="cv-edu-location">Dublin, Ireland</div>
+            </div>
+          </div>
+
+          <div class="cv-edu-item">
+            <div>
+              <div class="cv-edu-inst">University of Southern Denmark</div>
+              <div class="cv-edu-degree">Erasmus Programme</div>
+            </div>
+            <div class="cv-edu-right">
+              <div class="cv-edu-dates">Sep 2005 – Jun 2006</div>
+              <div class="cv-edu-location">Odense, Denmark</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="cv-block">
+          <div class="cv-block-title">Skills &amp; Tools</div>
+          <div class="cv-skills-grid">
+            <div>
+              <span class="cv-skill-group-label">Software</span>
+              <div class="cv-skill-group-value">Microsoft Office · Adobe InDesign, Photoshop, InCopy, XD · WordPress · Drupal · Figma</div>
+            </div>
+            <div>
+              <span class="cv-skill-group-label">SEO &amp; Social</span>
+              <div class="cv-skill-group-value">Google Ads · Google Analytics (GA4) · BrightEdge · Hootsuite · TalkWalker · Meta Ads Platform</div>
+            </div>
+            <div>
+              <span class="cv-skill-group-label">Languages</span>
+              <div class="cv-skill-group-value">English (native) · Irish (native) · French (intermediate) · Danish (intermediate)</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /cv-panel-inner -->
+    </div><!-- /cv-panel -->
+  </div>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-label">Get in Touch</div>
+    <h2 class="contact-headline reveal">
+      Let's make<br><em>something</em><br>worth reading.
+    </h2>
+    <div class="contact-links reveal">
+      <a href="mailto:tommyjeffers@gmail.com" class="contact-link">✉ Email me</a>
+      <a href="https://www.linkedin.com/in/tom-jeffers/" class="contact-link" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="#" class="contact-link">Download CV ↓</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Tom Jeffers</p>
+    <p>Content Strategist &amp; Digital Storyteller</p>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .work-card, .work-card-dark, .work-card-pdf, .work-card-video, .client-item, .cv-role, .cv-edu-item').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 60);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Work filters
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const allCards = document.querySelectorAll('[data-category]');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        allCards.forEach(item => {
+          item.style.display = (filter === 'all' || (item.dataset.category || '').includes(filter)) ? 'flex' : 'none';
+        });
+      });
+    });
+
+    // CV expand/collapse
+    const toggle = document.querySelector('.cv-toggle');
+    const panel  = document.getElementById('cv-panel');
+    const hint   = toggle.querySelector('.cv-toggle-hint');
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', !open);
+      panel.classList.toggle('open', !open);
+      hint.textContent = open ? 'Expand' : 'Collapse';
+    });
+  </script>
+</body>
+</html>
