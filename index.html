@@ -17,6 +17,7 @@
       --grey-light: #e8e7e4;
       --grey-mid: #b0aea9;
       --grey-dark: #4a4845;
+      --accent: #2b5cff;
       --serif: 'Cormorant Garamond', Georgia, serif;
       --mono: 'DM Mono', monospace;
     }
@@ -133,92 +134,109 @@
 
     /* WORK */
     .work { background: var(--white); }
-    .work-filters { display: flex; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap; }
-    .filter-btn {
-      font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
-      text-transform: uppercase; background: none; border: none;
-      color: var(--grey-mid); cursor: none; padding: 0.3rem 0;
-      border-bottom: 1px solid transparent; transition: color 0.2s, border-color 0.2s;
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--grey-light);
     }
-    .filter-btn.active, .filter-btn:hover { color: var(--black); border-bottom-color: var(--black); }
-    .work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-
     .work-card {
-      background: var(--grey-light); position: relative; overflow: hidden;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 1.75rem; transition: background 0.3s;
-      text-decoration: none; color: inherit; min-height: 270px;
+      background: var(--white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2.25rem;
+      min-height: 280px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.25s;
     }
-    .work-card:hover { background: #dddbd7; }
-    .work-card.featured { grid-column: span 2; min-height: 310px; }
+    .work-card:hover { background: var(--grey-light); }
+    .work-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
     .work-card-tag {
-      font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--grey-mid); margin-bottom: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
     }
-    .work-card-title { font-size: 1.35rem; font-weight: 400; line-height: 1.2; color: var(--black); margin-bottom: 0.4rem; }
-    .work-card-desc { font-size: 0.95rem; color: var(--grey-dark); line-height: 1.5; margin-top: 0.5rem; }
-    .work-card-client { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; color: var(--grey-dark); text-transform: uppercase; margin-top: 0.8rem; }
     .work-card-arrow {
-      position: absolute; top: 1.5rem; right: 1.5rem;
-      font-size: 1.2rem; color: var(--grey-mid);
+      font-size: 1.2rem;
+      color: var(--grey-mid);
       transition: transform 0.2s, color 0.2s;
+      flex-shrink: 0;
+      margin-left: 1rem;
     }
-    .work-card:hover .work-card-arrow { transform: translate(3px, -3px); color: var(--black); }
+    .work-card:hover .work-card-arrow {
+      transform: translate(3px, -3px);
+      color: var(--accent);
+    }
+    .work-card-body { margin-top: 1.5rem; }
+    .work-card-title {
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--black);
+      margin-bottom: 0.75rem;
+      transition: color 0.2s;
+    }
+    .work-card:hover .work-card-title { color: var(--accent); }
+    .work-card-desc {
+      font-size: 0.95rem;
+      color: var(--grey-dark);
+      line-height: 1.55;
+    }
+    .work-card-footer {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--grey-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .work-card-client {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--grey-dark);
+      text-transform: uppercase;
+    }
+    .work-card-link-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      transition: opacity 0.2s;
+    }
 
-    .work-card-dark {
-      background: #1c1c1c; position: relative; overflow: hidden;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 1.75rem; min-height: 270px;
+    /* Non-link card (no hyperlink available) */
+    .work-card.no-link { cursor: default; }
+    .work-card.no-link:hover { background: var(--white); }
+    .work-card.no-link:hover .work-card-title { color: var(--black); }
+    .work-card.no-link .work-card-link-label { color: var(--grey-mid); }
+    .pdf-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
     }
-    .work-card-dark .work-card-tag { color: var(--grey-dark); }
-    .work-card-dark .work-card-title { color: var(--white); }
-    .work-card-dark .work-card-desc { color: #888; }
-    .work-card-dark .work-card-client { color: var(--grey-dark); }
-
-    .work-card-pdf {
-      background: #111; position: relative; overflow: hidden;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 1.75rem; min-height: 270px;
+    .pdf-stat-num {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--black);
+      display: block;
     }
-    .work-card-pdf .work-card-tag { color: var(--grey-dark); }
-    .work-card-pdf .work-card-title { color: var(--white); }
-    .work-card-pdf .work-card-desc { color: #888; font-size: 0.9rem; }
-    .work-card-pdf .work-card-client { color: var(--grey-dark); }
-    .pdf-badge {
-      position: absolute; top: 1.5rem; right: 1.5rem;
-      font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.12em;
-      text-transform: uppercase; background: #2a2a2a; color: var(--grey-mid); padding: 0.3rem 0.6rem;
-    }
-    .pdf-stats { display: flex; gap: 1.5rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #2a2a2a; }
-    .pdf-stat-num { font-family: var(--mono); font-size: 0.85rem; color: var(--grey-mid); display: block; }
-    .pdf-stat-label { font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-dark); }
-
-    .work-card-video {
-      background: var(--black); display: flex; flex-direction: column;
-      overflow: hidden; min-height: 270px;
-    }
-    .work-card-video iframe { width: 100%; flex: 1; min-height: 180px; border: none; display: block; }
-    .work-card-video-meta { padding: 1.25rem 1.75rem; }
-    .work-card-video .work-card-tag { color: var(--grey-dark); }
-    .work-card-video .work-card-title { color: var(--white); font-size: 1.1rem; }
-    .work-card-video .work-card-desc { color: #888; font-size: 0.9rem; }
-    .work-card-video .work-card-client { color: var(--grey-dark); }
-
-    /* CLIENTS */
-    .clients { background: var(--black); color: var(--white); padding: 5rem 3rem; }
-    .clients .section-label { color: var(--grey-dark); }
-    .clients .section-label::after { background: #333; }
-    .clients-list { display: flex; flex-wrap: wrap; gap: 0; }
-    .client-item {
-      flex: 1; min-width: 160px; padding: 2rem;
-      border: 1px solid #1e1e1e; font-size: 1.1rem; font-weight: 300;
-      color: var(--grey-mid); transition: color 0.2s, border-color 0.2s;
-    }
-    .client-item:hover { color: var(--white); border-color: #444; }
-    .client-item span {
-      display: block; font-family: var(--mono); font-size: 0.55rem;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--grey-dark); margin-bottom: 0.5rem;
+    .pdf-stat-label {
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
     }
 
     /* ── CV / EXPERIENCE (expandable) ── */
@@ -258,7 +276,6 @@
     .cv-panel.open { max-height: 9999px; }
     .cv-panel-inner { padding: 0 3rem 5rem; border-top: 1px solid var(--grey-light); }
 
-    /* CV content styles */
     .cv-header {
       display: flex; justify-content: space-between; align-items: baseline;
       padding: 3rem 0 2rem;
@@ -367,7 +384,6 @@
     /* MOBILE */
     @media (max-width: 900px) {
       .work-grid { grid-template-columns: 1fr 1fr; }
-      .work-card.featured { grid-column: span 2; }
       .cv-skills-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 640px) {
@@ -379,8 +395,6 @@
       section { padding: 5rem 1.5rem; }
       .about-grid { grid-template-columns: 1fr; gap: 2rem; }
       .work-grid { grid-template-columns: 1fr; }
-      .work-card.featured { grid-column: span 1; }
-      .clients { padding: 4rem 1.5rem; }
       .cv-toggle { padding: 2rem 1.5rem; }
       .cv-panel-inner { padding: 0 1.5rem 4rem; }
       .cv-header { flex-direction: column; gap: 1rem; }
@@ -441,24 +455,21 @@
           My grounding in content and technical SEO informs how I approach every project — from site architecture and metadata to the kind of structured, authoritative writing that holds its ground as search evolves into AI-driven discovery.
         </p>
         <p>
-          Alongside editorial work, I have experience concepting and delivering global public health campaigns and producing both internal and external communications for corporate and multilateral clients.
+          Alongside editorial work, I have experience concepting and delivering global communications campaigns and producing both internal and external communications for corporate and multilateral clients.
         </p>
         <p>
           Currently available for freelance projects and full-time roles.
         </p>
         <div class="skills-row">
-  <ul class="skills-list">
-    <li>Content Strategy</li>
-    <li>Editing &amp; Proofreading</li>
-    <li>Technical SEO</li>
-    <li>Copywriting</li>
-    <li>Global Campaigns</li>
-    <li>Corporate Comms</li>
-    <li>Social Strategy</li>
-    <li>GEO / AI Search</li>
-  </ul>
-</div>
-
+          <span class="skill-tag">Content Strategy</span>
+          <span class="skill-tag">Editing &amp; Proofreading</span>
+          <span class="skill-tag">Technical SEO</span>
+          <span class="skill-tag">Copywriting</span>
+          <span class="skill-tag">Global Campaigns</span>
+          <span class="skill-tag">Corporate Comms</span>
+          <span class="skill-tag">Social Strategy</span>
+          <span class="skill-tag">GEO / AI Search</span>
+        </div>
       </div>
     </div>
   </section>
@@ -466,106 +477,121 @@
   <!-- WORK -->
   <section class="work" id="work">
     <div class="section-label">Selected Work</div>
-    <div class="work-filters">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="editorial">Editorial</button>
-      <button class="filter-btn" data-filter="campaign">Campaign</button>
-      <button class="filter-btn" data-filter="social">Social</button>
-      <button class="filter-btn" data-filter="comms">Comms</button>
-    </div>
     <div class="work-grid">
 
-      <a class="work-card featured reveal" data-category="editorial comms"
-         href="https://www.nestle.com/sustainability/" target="_blank" rel="noopener">
-        <span class="work-card-tag">Editorial · Corporate Comms</span>
-        <div class="work-card-title">Nestlé Sustainability</div>
-        <p class="work-card-desc">Strategy, copywriting and editing for Nestlé's sustainability content — translating complex global commitments into clear, credible public-facing copy across a high-traffic corporate site.</p>
-        <div class="work-card-client">Nestlé · nestle.com/sustainability</div>
-        <span class="work-card-arrow">↗</span>
+      <!-- 1. Nestlé -->
+      <a class="work-card reveal" href="https://www.nestle.com/sustainability/" target="_blank" rel="noopener">
+        <div class="work-card-top">
+          <span class="work-card-tag">Editorial · Corporate Comms</span>
+          <span class="work-card-arrow">↗</span>
+        </div>
+        <div class="work-card-body">
+          <div class="work-card-title">Nestlé Sustainability</div>
+          <p class="work-card-desc">Strategy, copywriting and editing for Nestlé's sustainability content — translating complex global commitments into clear, credible public-facing copy.</p>
+        </div>
+        <div class="work-card-footer">
+          <span class="work-card-client">Nestlé</span>
+          <span class="work-card-link-label">View site</span>
+        </div>
       </a>
 
-      <a class="work-card reveal" data-category="editorial comms"
-         href="https://www.wjinitiative2030.org" target="_blank" rel="noopener">
-        <span class="work-card-tag">Editorial · Industry Platform</span>
-        <div class="work-card-title">Watch &amp; Jewellery<br>Initiative 2030</div>
-        <p class="work-card-desc">Strategy and copywriting for the WJI 2030 site and resources — positioning a multi-stakeholder sustainability platform for an international industry audience.</p>
-        <div class="work-card-client">WJI 2030 · wjinitiative2030.org</div>
-        <span class="work-card-arrow">↗</span>
+      <!-- 2. WJI 2030 -->
+      <a class="work-card reveal" href="https://www.wjinitiative2030.org" target="_blank" rel="noopener">
+        <div class="work-card-top">
+          <span class="work-card-tag">Editorial · Industry Platform</span>
+          <span class="work-card-arrow">↗</span>
+        </div>
+        <div class="work-card-body">
+          <div class="work-card-title">Watch &amp; Jewellery Initiative 2030</div>
+          <p class="work-card-desc">Strategy and copywriting for the WJI 2030 site and resources — positioning a multi-stakeholder sustainability platform for an international industry audience.</p>
+        </div>
+        <div class="work-card-footer">
+          <span class="work-card-client">WJI 2030</span>
+          <span class="work-card-link-label">View site</span>
+        </div>
       </a>
 
-      <a class="work-card reveal" data-category="campaign social"
-         href="https://world-heart-federation.org/world-heart-day/" target="_blank" rel="noopener">
-        <span class="work-card-tag">Campaign · Social Strategy</span>
-        <div class="work-card-title">World Heart Day<br>2021–2024</div>
-        <p class="work-card-desc">Concept, paid and organic social media strategy for the World Heart Federation's flagship annual campaign — reaching global audiences across multiple languages and markets.</p>
-        <div class="work-card-client">World Heart Federation · 2021–2024</div>
-        <span class="work-card-arrow">↗</span>
+      <!-- 3. World Heart Day -->
+      <a class="work-card reveal" href="https://world-heart-federation.org/world-heart-day/" target="_blank" rel="noopener">
+        <div class="work-card-top">
+          <span class="work-card-tag">Campaign · Social Strategy</span>
+          <span class="work-card-arrow">↗</span>
+        </div>
+        <div class="work-card-body">
+          <div class="work-card-title">World Heart Day 2021–2024</div>
+          <p class="work-card-desc">Concept and paid/organic social media strategy for the World Heart Federation's flagship annual campaign — reaching global audiences across multiple markets.</p>
+        </div>
+        <div class="work-card-footer">
+          <span class="work-card-client">World Heart Federation</span>
+          <span class="work-card-link-label">View site</span>
+        </div>
       </a>
 
-      <div class="work-card work-card-pdf reveal" data-category="campaign comms">
-        <div class="pdf-badge">Abridged Report</div>
-        <span class="work-card-tag">Campaign · Reporting</span>
-        <div class="work-card-title">International HPV<br>Awareness Day 2024</div>
-        <p class="work-card-desc">Campaign strategy, content and reporting for IPVS's global HPV awareness initiative — coordinating messaging across 140 partner organisations in 19+ countries.</p>
-        <div class="work-card-client">IPVS / AskAboutHPV.org · 2024</div>
-        <div class="pdf-stats">
-          <div class="pdf-stat">
-            <span class="pdf-stat-num">1M+</span>
-            <span class="pdf-stat-label">New site visitors</span>
+      <!-- 4. HPV Awareness Day -->
+      <div class="work-card no-link reveal">
+        <div class="work-card-top">
+          <span class="work-card-tag">Campaign · Reporting</span>
+        </div>
+        <div class="work-card-body">
+          <div class="work-card-title">International HPV Awareness Day 2024</div>
+          <p class="work-card-desc">Campaign strategy, content and reporting for IPVS's global HPV awareness initiative, coordinated across 140 partner organisations.</p>
+          <div class="pdf-stats">
+            <div class="pdf-stat">
+              <span class="pdf-stat-num">1M+</span>
+              <span class="pdf-stat-label">Visitors</span>
+            </div>
+            <div class="pdf-stat">
+              <span class="pdf-stat-num">97.5M</span>
+              <span class="pdf-stat-label">Reach</span>
+            </div>
+            <div class="pdf-stat">
+              <span class="pdf-stat-num">140</span>
+              <span class="pdf-stat-label">Partners</span>
+            </div>
           </div>
-          <div class="pdf-stat">
-            <span class="pdf-stat-num">97.5M</span>
-            <span class="pdf-stat-label">Hashtag reach</span>
-          </div>
-          <div class="pdf-stat">
-            <span class="pdf-stat-num">140</span>
-            <span class="pdf-stat-label">Global partners</span>
-          </div>
+        </div>
+        <div class="work-card-footer">
+          <span class="work-card-client">IPVS / AskAboutHPV.org</span>
+          <span class="work-card-link-label">Abridged report</span>
         </div>
       </div>
 
-      <div class="work-card work-card-dark reveal" data-category="campaign social">
-        <span class="work-card-tag">Campaign · Copywriting · Social</span>
-        <div class="work-card-title">World Stroke Day<br>Campaign Toolkit</div>
-        <p class="work-card-desc">Concept, copywriting and social media strategy for the World Stroke Day campaign toolkit — giving partner organisations globally localisation-ready assets and messaging frameworks.</p>
-        <div class="work-card-client">World Stroke Organization</div>
+      <!-- 5. World Stroke Day -->
+      <div class="work-card no-link reveal">
+        <div class="work-card-top">
+          <span class="work-card-tag">Campaign · Copywriting · Social</span>
+        </div>
+        <div class="work-card-body">
+          <div class="work-card-title">World Stroke Day Campaign Toolkit</div>
+          <p class="work-card-desc">Concept, copywriting and social media strategy for the World Stroke Day campaign toolkit — giving partners globally localisation-ready assets and messaging frameworks.</p>
+        </div>
+        <div class="work-card-footer">
+          <span class="work-card-client">World Stroke Organization</span>
+          <span class="work-card-link-label">Campaign toolkit</span>
+        </div>
       </div>
 
-      <div class="work-card work-card-video reveal" data-category="comms editorial">
-        <iframe
-          src="https://www.youtube.com/embed/kO4qBXIaw60"
-          title="Strategy &amp; Copywriting — Tom Jeffers"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
-        <div class="work-card-video-meta">
-          <span class="work-card-tag">Video · Copywriting</span>
-          <div class="work-card-title">Strategy &amp; Copywriting</div>
-          <p class="work-card-desc">Script strategy and copywriting for video production.</p>
+      <!-- 6. Placeholder for symmetry -->
+      <div class="work-card no-link reveal">
+        <div class="work-card-top">
+          <span class="work-card-tag">More on request</span>
+        </div>
+        <div class="work-card-body">
+          <div class="work-card-title">Additional work samples</div>
+          <p class="work-card-desc">Further examples — including internal communications for the WHO and ILO — available on request.</p>
+        </div>
+        <div class="work-card-footer">
+          <span class="work-card-client">Available on request</span>
+          <span class="work-card-link-label">Get in touch</span>
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- CLIENTS -->
-  <div class="clients reveal">
-    <div class="section-label">Selected Clients</div>
-    <div class="clients-list">
-      <div class="client-item"><span>Food &amp; Beverage</span>Nestlé</div>
-      <div class="client-item"><span>Public Health</span>World Heart Federation</div>
-      <div class="client-item"><span>UN Agency</span>WHO</div>
-      <div class="client-item"><span>Public Health</span>IPVS</div>
-      <div class="client-item"><span>Public Health</span>Planned Parenthood</div>
-      <div class="client-item"><span>UN Agency</span>ILO</div>
-      <div class="client-item"><span>Luxury / Sustainability</span>WJI 2030</div>
-      <div class="client-item"><span>Public Health</span>World Stroke Organization</div>
-    </div>
-  </div>
-
   <!-- CV — expandable -->
   <div class="cv-section" id="cv">
-    <button class="cv-toggle" aria-expanded="false" aria-controls="cv-panel" id="cv">
+    <button class="cv-toggle" aria-expanded="false" aria-controls="cv-panel" id="cv-toggle">
       <div class="cv-toggle-left">
         <span class="cv-toggle-label">Experience &amp; Education</span>
         <span class="cv-toggle-title">Curriculum Vitae</span>
@@ -576,7 +602,7 @@
       </div>
     </button>
 
-    <div class="cv-panel" id="cv-panel" role="region" aria-labelledby="cv">
+    <div class="cv-panel" id="cv-panel" role="region" aria-labelledby="cv-toggle">
       <div class="cv-panel-inner">
 
         <!-- CV Header -->
@@ -791,7 +817,7 @@
     <div class="contact-links reveal">
       <a href="mailto:tommyjeffers@gmail.com" class="contact-link">✉ Email me</a>
       <a href="https://www.linkedin.com/in/tom-jeffers/" class="contact-link" target="_blank" rel="noopener">LinkedIn ↗</a>
-      <a href="#" class="contact-link">Download CV ↓</a>
+      <a href="Tom_Jeffers_CV.pdf" class="contact-link" download>Download CV ↓</a>
     </div>
   </section>
 
@@ -808,7 +834,7 @@
       cursor.style.left = e.clientX + 'px';
       cursor.style.top = e.clientY + 'px';
     });
-    document.querySelectorAll('a, button, .work-card, .work-card-dark, .work-card-pdf, .work-card-video, .client-item, .cv-role, .cv-edu-item').forEach(el => {
+    document.querySelectorAll('a, button, .work-card, .cv-role, .cv-edu-item').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
@@ -824,22 +850,8 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Work filters
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const allCards = document.querySelectorAll('[data-category]');
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filter = btn.dataset.filter;
-        allCards.forEach(item => {
-          item.style.display = (filter === 'all' || (item.dataset.category || '').includes(filter)) ? 'flex' : 'none';
-        });
-      });
-    });
-
     // CV expand/collapse
-    const toggle = document.querySelector('.cv-toggle');
+    const toggle = document.getElementById('cv-toggle');
     const panel  = document.getElementById('cv-panel');
     const hint   = toggle.querySelector('.cv-toggle-hint');
     toggle.addEventListener('click', () => {
